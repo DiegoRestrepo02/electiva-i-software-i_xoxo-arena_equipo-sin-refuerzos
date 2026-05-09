@@ -1,0 +1,102 @@
+body {
+    background-color: #0B1F3A;
+    color: #fff !important;
+}
+
+.colorFondoNavbar {
+    background-color: #123A5A !important;
+    color: #fff !important;
+}
+
+.colorFondoNavbar ul li a {
+    color: #fff !important;
+}
+
+.btn,
+.listaCierreSession {
+    background-color: #00B4D8;
+    color: #fff;
+}
+
+.btnCierreSession {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.btn:hover,
+.listaCierreSession li a:hover {
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+}
+
+.nav-link:hover {
+    background-color: #0b5ed7 !important;
+    border-color: #0a58ca !important;
+    border-radius: 5px;
+}
+
+.textSecundario {
+    color: #CED4DA;
+}
+
+.textSecundario:hover {
+    color: #a7aaad;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.login-subtitle {
+    margin-top: 4px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.login-title {
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    font-size: 1.75rem;
+}
+
+.login-card {
+    background: rgba(7, 16, 48, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(18px);
+}
+
+.tableroJuego {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.65);
+}
+
+.fs-x-small {
+    font-size: x-small;
+}
+
+.icono-info {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+.btnPosicionTablero {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: 32px;
+    font-weight: bold;
+    min-height: 55px;
+}
+
+.btnPosicionTablero:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btnPosicionTableroEsX {
+    color: #4dd0e1;
+}
+
+.btnPosicionTableroEsO {
+    color: #dc3545;
+}

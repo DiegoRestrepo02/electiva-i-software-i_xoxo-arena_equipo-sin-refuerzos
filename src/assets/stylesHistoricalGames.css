@@ -1,0 +1,52 @@
+.mini-tablero {
+    display: grid;
+    grid-template-columns: repeat(3, 32px);
+    gap: 2px;
+    justify-content: center;
+}
+
+.mini-tablero .celda {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.colorPosicionTableroEsX {
+    color: #4dd0e1;
+}
+
+.colorPosicionTableroEsO {
+    color: #dc3545;
+}
+
+.badge-ganaste {
+    background: #d1f7dd;
+    color: #198754;
+}
+
+.badge-perdiste {
+    background: #ffd9dd;
+    color: #dc3545;
+}
+
+.badge-empate {
+    background: #fff3cd;
+    color: #b8860b;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+    background-color: #0B1F3A;
+    color: #fff !important;
+}
+
+.row-table {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 24px 40px rgba(0, 0, 0, 0.65);
+}
