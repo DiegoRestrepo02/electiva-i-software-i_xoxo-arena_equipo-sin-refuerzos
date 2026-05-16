@@ -124,25 +124,21 @@ export const GamePage = () => {
             <div className="row mb-5 mt-3">
                 <div className="col-12 col-sm-12 col-md-4 col-lg-4 mx-auto rounded p-3 tableroJuego">
                     {
-                        tablero.map((item, row) => {
-                            if (row % 3 == 0) {
-                                return (
-                                    <div className="row">
-                                        {[0, 1, 2].map((col) => {
-                                            const posicion = row + col;
-                                            return (
-                                                <div className="col-4 py-2">
-                                                    <button className={"w-100 btnPosicionTablero " + (tablero[posicion] == "X" ? "btnPosicionTableroEsX" : "btnPosicionTableroEsO")} onClick={() => llenarPosicion(posicion)}>
-                                                        {tablero[posicion]}
-                                                    </button>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                );
-                            }
-
-                            return "";
+                        [0, 1, 2].map((row) => {
+                            return (
+                                <div className="row">
+                                    {[0, 1, 2].map((col) => {
+                                        const posicion = (row * 3) + col;
+                                        return (
+                                            <div className="col-4 py-2">
+                                                <button className={"w-100 btnPosicionTablero " + (tablero[posicion] == "X" ? "btnPosicionTableroEsX" : "btnPosicionTableroEsO")} onClick={() => llenarPosicion(posicion)}>
+                                                    {tablero[posicion]}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            );
                         })
                     }
                 </div>
