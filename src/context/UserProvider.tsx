@@ -4,9 +4,10 @@ import { UserContext } from "./UserContext";
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState(() => {
         const usuarioDefecto = {
-            logged: false,
-            name: "",
-            email: ""
+            bitLogeado: false,
+            strNobre: "",
+            strCorreo: "",
+            uid: ""
         };
 
         const usuarioGuardado = localStorage.getItem("usuarioAquaBattle");
@@ -15,7 +16,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (user) {
-            if (!user.logged) {
+            if (!user.bitLogeado) {
                 localStorage.removeItem("usuarioAquaBattle");
             }
             {

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
@@ -13,12 +13,15 @@ export const NavBar = () => {
 
     const onBtnCerrarSession = () => {
         setUser({
-            logged: false,
-            name: "",
-            email: ""
+            bitLogeado: false,
+            strNombre: "",
+            strCorreo: "",
+            uid: ""
         });
     };
 
+    const [openDropdown, setOpenDropdown] = useState(false);
+    
     return (
         <>
             <nav className="navbar navbar-expand-lg bg-body-tertiary colorFondoNavbar">
@@ -40,10 +43,10 @@ export const NavBar = () => {
                         </ul>
                         <div className="d-flex" role="search">
                             <div className="dropdown">
-                                <button className="btn btn-secondary dropdown-toggle btnCierreSession" data-bs-toggle="dropdown">{user.name}</button>
-                                <ul className="dropdown-menu dropdown-menu-end listaCierreSession">
+                                <button className="btn btn-secondary dropdown-toggle btnCierreSession" data-bs-toggle="dropdown" onClick={() => setOpenDropdown(!openDropdown)}>{user.strNombre}</button>
+                                <ul className={`dropdown-menu dropdown-menu-end listaCierreSession ${openDropdown ? "show" : ""}`}>
                                     <li>
-                                        <a className="dropdown-item" href="/my-profile">{user.email}</a>
+                                        <a className="dropdown-item" href="/my-profile">{user.strCorreo}</a>
                                     </li>
                                     <li>
                                         <a onClick={onBtnCerrarSession} className="dropdown-item cursor-pointer">Cerrar sesión</a>

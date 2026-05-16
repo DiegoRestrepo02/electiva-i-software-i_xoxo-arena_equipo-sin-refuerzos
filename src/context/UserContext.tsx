@@ -1,9 +1,10 @@
 import { createContext } from "react";
 
 type UserType = {
-  logged: boolean;
-  email: string;
-  name: string;
+  strCorreo: string;
+  strNombre: string;
+  uid: string;
+  bitLogeado: boolean;
 };
 
 type UserContextType = {

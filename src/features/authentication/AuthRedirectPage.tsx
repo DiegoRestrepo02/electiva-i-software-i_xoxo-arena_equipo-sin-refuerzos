@@ -13,12 +13,12 @@ export const AuthRedirectPage = () => {
     return (
         <>
             {
-                !user.logged && (
+                !user.bitLogeado && (
                     <LoginPage />
                 )
             }
             {
-                user.logged && (
+                user.bitLogeado && (
                     <>
                         <NavBar />
                         <AppRouter />

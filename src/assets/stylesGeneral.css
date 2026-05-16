@@ -112,3 +112,8 @@ body {
 .btn-close {
     filter: invert(1);
 }
+
+.row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}

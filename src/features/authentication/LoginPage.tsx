@@ -1,16 +1,20 @@
 import { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { UserContext } from "../../context/UserContext";
+import { iniciarSession, registrarUsuario } from "../../firebase/authProviders";
 
 export const LoginPage = () => {
     const context = useContext(UserContext);
     const { setUser } = context;
 
-    const [usuario, setUsuario] = useState<string>("");
-    const [clave, setClave] = useState<string>("");
+    const [txtCorreoLogin, setTxtCorreoLogin] = useState<string>("");
+    const [txtClaveLogin, setTxtClaveLogin] = useState<string>("");
+    const [txtNombreCompletoRegistro, setTxtNombreCompletoRegistro] = useState<string>("");
+    const [txtCorreoRegistro, setTxtCorreoRegistro] = useState<string>("");
+    const [txtClaveRegistro, setTxtClaveRegistro] = useState<string>("");
 
-    const onBtnLogin = () => {
-        if (!usuario) {
+    const onBtnLogin = async () => {
+        if (!txtCorreoLogin) {
             Swal.fire({
                 icon: "warning",
                 title: "Oops...",
@@ -19,7 +23,7 @@ export const LoginPage = () => {
             return;
         }
 
-        if (!clave) {
+        if (!txtClaveLogin) {
             Swal.fire({
                 icon: "warning",
                 title: "Oops...",
@@ -28,7 +32,9 @@ export const LoginPage = () => {
             return;
         }
 
-        if (!(usuario == "admin" && clave == "123")) {
+        const result = await iniciarSession(txtCorreoLogin, txtClaveLogin);
+
+        if (!result.bitExitoso) {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
@@ -38,9 +44,58 @@ export const LoginPage = () => {
         }
 
         setUser({
-            logged: true,
-            email: "losnoob29@gmail.com",
-            name: "Diego Restrepo"
+            bitLogeado: true,
+            strCorreo: txtCorreoLogin,
+            strNombre: result.strNombre,
+            uid: result.uid
+        });
+    };
+
+    const onBtnRegistrarse = async () => {
+        if (!txtNombreCompletoRegistro) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "El campo nombre completo es obligatorio."
+            });
+            return;
+        }
+
+        if (!txtCorreoRegistro) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "El campo correo es obligatorio."
+            });
+            return;
+        }
+
+        if (!txtClaveRegistro) {
+            Swal.fire({
+                icon: "warning",
+                title: "Oops...",
+                text: "El campo contraseña es obligatorio."
+            });
+            return;
+        }
+
+        const result = await registrarUsuario(txtCorreoRegistro, txtClaveRegistro, txtNombreCompletoRegistro);
+
+        if (!result.bitExitoso) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: result.strMensaje
+            });
+            return;
+        }
+
+        Swal.fire({
+            icon: "success",
+            title: "¡Genial!",
+            text: "Usuario registrado con éxito.."
+        }).then((result) => {
+            window.location.reload();
         });
     };
 
@@ -60,19 +115,19 @@ export const LoginPage = () => {
                     </div>
                     <div className="row">
                         <div className="col-12 mb-3">
-                            <label htmlFor="txtUsuario" className="form-label">Usuario</label>
-                            <input type="text" className="form-control" id="txtUsuario" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
+                            <label htmlFor="txtCorreo" className="form-label">Correo</label>
+                            <input type="text" className="form-control" id="txtCorreo" value={txtCorreoLogin} onChange={(e) => setTxtCorreoLogin(e.target.value)} />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 mb-3">
                             <label htmlFor="txtClave" className="form-label">Contraseña</label>
-                            <input type="password" className="form-control" id="txtClave" value={clave} onChange={(e) => setClave(e.target.value)} />
+                            <input type="password" className="form-control" id="txtClave" value={txtClaveLogin} onChange={(e) => setTxtClaveLogin(e.target.value)} />
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 mb-3 text-center">
-                            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="textSecundario cursor-pointer">¿No tienes cuenta? Regístrate ahora</a>
+                            <a data-bs-toggle="modal" data-bs-target="#mdlRegistro" className="textSecundario cursor-pointer">¿No tienes cuenta? Regístrate ahora</a>
                         </div>
                     </div>
                     <div className="row">
@@ -83,42 +138,32 @@ export const LoginPage = () => {
                 </div>
             </div>
 
-            <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div className="modal fade" id="mdlRegistro" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="mdlRegistroLabel" aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel">¡Regístrate!</h1>
+                            <h1 className="modal-title fs-5" id="mdlRegistroLabel">¡Regístrate!</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
                             <div className="row">
                                 <div className="col-12 col-md-4 col-lg-4 mb-3">
-                                    <label htmlFor="txtNombreModal" className="form-label">Nombre</label>
-                                    <input type="text" className="form-control" id="txtNombreModal" />
-                                </div>
-                                <div className="col-12 col-md-4 col-lg-4 mb-3">
-                                    <label htmlFor="txtApellidoModal" className="form-label">Apellido</label>
-                                    <input type="text" className="form-control" id="txtApellidoModal" />
+                                    <label htmlFor="txtNombreModal" className="form-label">Nombre completo</label>
+                                    <input type="text" className="form-control" id="txtNombreModal" value={txtNombreCompletoRegistro} onChange={(e) => setTxtNombreCompletoRegistro(e.target.value)} />
                                 </div>
                                 <div className="col-12 col-md-4 col-lg-4 mb-3">
                                     <label htmlFor="txtCorreoModal" className="form-label">Correo</label>
-                                    <input type="text" className="form-control" id="txtCorreoModal" />
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-12 col-md-4 col-lg-4 mb-3">
-                                    <label htmlFor="txtUsuarioModal" className="form-label">Usuario</label>
-                                    <input type="text" className="form-control" id="txtUsuarioModal" />
+                                    <input type="text" className="form-control" id="txtCorreoModal" value={txtCorreoRegistro} onChange={(e) => setTxtCorreoRegistro(e.target.value)} />
                                 </div>
                                 <div className="col-12 col-md-4 col-lg-4 mb-3">
                                     <label htmlFor="txtClaveModal" className="form-label">Contraseña</label>
-                                    <input type="password" className="form-control" id="txtClaveModal" />
+                                    <input type="password" className="form-control" id="txtClaveModal" value={txtClaveRegistro} onChange={(e) => setTxtClaveRegistro(e.target.value)} />
                                 </div>
                             </div>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-md btn-primary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" className="btn btn-md btn-primary">¡Registrarse!</button>
+                            <button type="button" className="btn btn-md btn-primary" onClick={onBtnRegistrarse}>¡Registrarse!</button>
                         </div>
                     </div>
                 </div>
