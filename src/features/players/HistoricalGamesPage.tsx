@@ -55,7 +55,7 @@ export const HistoricalGamesPage = () => {
                                 {
                                     historial.map((data: any, index) => {
                                         return (
-                                            <tr>
+                                            <tr key={"trHistorial_" + index}>
                                                 <td>{index + 1}</td>
                                                 <td>
                                                     {data.fecha} <br />
@@ -64,16 +64,16 @@ export const HistoricalGamesPage = () => {
                                                 <td>
                                                     <div className="mini-tablero">
                                                         {
-                                                            data.resultado.map((valorPosicion: string) => {
+                                                            data.resultado.map((valorPosicion: string, index2: number) => {
                                                                 return (
-                                                                    <div className={`celda ${valorPosicion == "X" ? "colorPosicionTableroEsX" : "colorPosicionTableroEsO"}`}>{valorPosicion}</div>
+                                                                    <div key={"posicionMiniTablero_" + index2.toString()} className={`celda ${valorPosicion == "X" ? "colorPosicionTableroEsX" : "colorPosicionTableroEsO"}`}>{valorPosicion}</div>
                                                                 );
                                                             })
                                                         }
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span className='me-1'>{user.strNombre}</span>
+                                                    <span className='me-1'>{data.nombre}</span>
                                                     <span className="badge bg-primary-subtle text-primary">Tú</span>
                                                 </td>
                                                 <td>

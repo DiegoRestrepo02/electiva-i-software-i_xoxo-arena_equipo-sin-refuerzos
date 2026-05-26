@@ -70,7 +70,7 @@ export const GamePage = () => {
 
         if (winner() != "") {
             if (!guardoPartida) {
-                pedirNombreOponente().then(nombre => {
+                pedirNombreOponente().then(nombreOponente => {
                     const ahora = new Date();
 
                     const fechaFormateada = new Date().toLocaleDateString('es-CO', {
@@ -90,9 +90,10 @@ export const GamePage = () => {
                         empate: winner() == "E" ? true : false,
                         ganaste: winner() == "X" ? true : false,
                         resultado: tablero,
-                        nombre_oponente: nombre,
+                        nombre_oponente: nombreOponente,
                         fecha: fechaFormateada,
-                        hora: horaFormateada
+                        hora: horaFormateada,
+                        nombre: user.strNombre
                     };
 
                     insertarPartida(dataInsert);

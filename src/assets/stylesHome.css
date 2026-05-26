@@ -1,0 +1,85 @@
+.avatar-top {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: auto;
+    box-shadow: 0 0 25px rgba(0, 0, 0, .4);
+}
+
+.card {
+    background: rgba(8, 28, 58, .9) !important;
+    backdrop-filter: blur(8px);
+}
+
+.table-dark td,
+.table-dark th {
+    padding: 1rem;
+}
+
+.table tbody tr:hover {
+    background: rgba(13, 202, 240, .08);
+    transition: .2s;
+}
+
+.bg-top-1 {
+    background-color: #F6B104;
+}
+
+.bg-top-2 {
+    background-color: #1E3450;
+}
+
+.bg-top-3 {
+    background-color: #5B3923;
+}
+
+.border-top-1 {
+    border-color: #9B854F;
+}
+
+.border-top-2 {
+    border-color: #182F4B;
+}
+
+.border-top-3 {
+    border-color: #182F4B;
+}
+
+.bg-icon-top-1 {
+    background-color: #252525;
+    border: 2px solid #524A2B;
+}
+
+.bg-icon-top-2 {
+    background-color: #3A309C;
+    border: 2px solid #203452;
+}
+
+.bg-icon-top-3 {
+    background-color: #03554B;
+    border: 2px solid #0E2441;
+}
+
+.text-victorias {
+    color: #01BFE5;
+}
+
+.color-estadisticas {
+    color: #F4E1B4 !important;
+}
+
+.color-trofeo {
+    color: #F8B512;
+}
+
+.color-gamepad {
+    color: #D1E2F8;
+}
+
+.color-estrella {
+    color: #F8BD04;
+}
