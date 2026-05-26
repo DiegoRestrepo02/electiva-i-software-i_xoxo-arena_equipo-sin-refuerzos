@@ -1,6 +1,30 @@
+import { useContext, useState } from 'react';
 import '../../assets/stylesHistoricalGames.css';
+import { UserContext } from '../../context/UserContext';
+import { consultarPartidasUsuario } from '../../firebase/historialPartidasProviders';
+import Swal from 'sweetalert2';
 
 export const HistoricalGamesPage = () => {
+    const context = useContext(UserContext);
+    const { user } = context;
+
+    const [historial, setHistorial] = useState([]);
+
+    const partidas = consultarPartidasUsuario(user.uid);
+
+    partidas.then(result => {
+        if (!result.bitExitoso) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: result.strMensajeError
+            });
+            return;
+        }
+
+        setHistorial(result.datos);
+    });
+
     return (
         <>
             <div className='container mb-4'>
@@ -28,96 +52,48 @@ export const HistoricalGamesPage = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        05/05/2026 <br />
-                                        <small className="text-muted">10:45 AM</small>
-                                    </td>
-                                    <td>
-                                        <div className="mini-tablero">
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsO"></div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsO"></div>
-                                            <div className="celda colorPosicionTableroEsO"></div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className='me-1'>Diego Restrepo</span>
-                                        <span className="badge bg-primary-subtle text-primary">Tú</span>
-                                    </td>
-                                    <td>
-                                        <span className='me-1'>Pepito Perez</span>
-                                    </td>
-                                    <td>
-                                        <span className="badge badge-ganaste">Ganaste</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>
-                                        05/05/2026 <br />
-                                        <small className="text-muted">10:32 AM</small>
-                                    </td>
-                                    <td>
-                                        <div className="mini-tablero">
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className='me-1'>Diego Restrepo</span>
-                                        <span className="badge bg-primary-subtle text-primary">Tú</span>
-                                    </td>
-                                    <td>
-                                        <span className='me-1'>Pepito Perez</span>
-                                    </td>
-                                    <td>
-                                        <span className="badge badge-empate">Empate</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>
-                                        05/05/2026 <br />
-                                        <small className="text-muted">10:21 AM</small>
-                                    </td>
-                                    <td>
-                                        <div className="mini-tablero">
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsX">X</div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsO"></div>
-                                            <div className="celda colorPosicionTableroEsO">O</div>
-                                            <div className="celda colorPosicionTableroEsO"></div>
-                                            <div className="celda colorPosicionTableroEsO"></div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className='me-1'>Diego Restrepo</span>
-                                    </td>
-                                    <td>
-                                        <span className='me-1'>Pepito Perez</span>
-                                        <span className="badge bg-primary-subtle text-primary">Él</span>
-                                    </td>
-                                    <td>
-                                        <span className="badge badge-perdiste">Perdiste</span>
-                                    </td>
-                                </tr>
+                                {
+                                    historial.map((data: any, index) => {
+                                        return (
+                                            <tr>
+                                                <td>{index + 1}</td>
+                                                <td>
+                                                    {data.fecha} <br />
+                                                    <small className="">{data.hora}</small>
+                                                </td>
+                                                <td>
+                                                    <div className="mini-tablero">
+                                                        {
+                                                            data.resultado.map((valorPosicion: string) => {
+                                                                return (
+                                                                    <div className={`celda ${valorPosicion == "X" ? "colorPosicionTableroEsX" : "colorPosicionTableroEsO"}`}>{valorPosicion}</div>
+                                                                );
+                                                            })
+                                                        }
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span className='me-1'>{user.strNombre}</span>
+                                                    <span className="badge bg-primary-subtle text-primary">Tú</span>
+                                                </td>
+                                                <td>
+                                                    <span className='me-1'>{data.nombre_oponente}</span>
+                                                </td>
+                                                <td>
+                                                    {
+                                                        data.empate ? (
+                                                            <span className="badge badge-empate">Empate</span>
+                                                        ) : data.ganaste ? (
+                                                            <span className="badge badge-ganaste">Ganaste</span>
+                                                        ) : (
+                                                            <span className="badge badge-perdiste">Perdiste</span>
+                                                        )
+                                                    }
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                }
                             </tbody>
                         </table>
                     </div>

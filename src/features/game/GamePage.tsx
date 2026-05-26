@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Swal from "sweetalert2";
+import { UserContext } from "../../context/UserContext";
+import { insertarPartida } from "../../firebase/historialPartidasProviders";
 
 export const GamePage = () => {
+    const context = useContext(UserContext);
+    const { user } = context;
+
     const empiezaJugador1 = Math.random() < 0.5;
 
     const [tablero, setTablero] = useState(Array(9).fill(""));
     const [turnoJugador1, setTurnoJugador1] = useState(empiezaJugador1);
+    const [guardoPartida, setGuardoPartida] = useState(false);
 
     const winner = (): string => {
         const formasGanar = [
@@ -33,8 +39,26 @@ export const GamePage = () => {
         }
     };
 
+    const pedirNombreOponente = () => {
+        return Swal.fire({
+            title: 'Ingresa el nombre de tu oponente',
+            input: 'text',
+            inputPlaceholder: 'Nombre oponente',
+            confirmButtonText: 'Continuar',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showCancelButton: false,
+            confirmButtonColor: '#00B4D8',
+            inputValidator: (value) => {
+                if (!value || !value.trim()) {
+                    return 'El nombre es obligatorio';
+                }
+            }
+        }).then(result => result.value);
+    };
+
     const llenarPosicion = (i: number) => {
-        if (tablero[i] != "" || winner() != "") {
+        if (tablero[i] != "" || winner() != "" || guardoPartida) {
             return;
         }
 
@@ -43,11 +67,45 @@ export const GamePage = () => {
 
         setTablero(nuevoValorTablero);
         setTurnoJugador1(!turnoJugador1);
+
+        if (winner() != "") {
+            if (!guardoPartida) {
+                pedirNombreOponente().then(nombre => {
+                    const ahora = new Date();
+
+                    const fechaFormateada = new Date().toLocaleDateString('es-CO', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+
+                    const horaFormateada = ahora.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    });
+
+                    const dataInsert = {
+                        user_uid: user.uid,
+                        empate: winner() == "E" ? true : false,
+                        ganaste: winner() == "X" ? true : false,
+                        resultado: tablero,
+                        nombre_oponente: nombre,
+                        fecha: fechaFormateada,
+                        hora: horaFormateada
+                    };
+
+                    insertarPartida(dataInsert);
+                    setGuardoPartida(true);
+                });
+            }
+        }
     };
 
     const onBtnReiniciar = () => {
         setTablero(Array(9).fill(""));
         setTurnoJugador1(empiezaJugador1);
+        setGuardoPartida(false);
     };
 
     const msjReinicarPartidaCurso = () => {
@@ -61,7 +119,8 @@ export const GamePage = () => {
             text: "La partida actual se reiniciará y no podrás recuperarla.",
             showCancelButton: true,
             confirmButtonText: "Sí, reiniciar",
-            cancelButtonText: `No, cancelar`
+            cancelButtonText: `No, cancelar`,
+            confirmButtonColor: '#00B4D8',
         }).then((result) => {
             if (result.isConfirmed) {
                 onBtnReiniciar();
@@ -126,11 +185,11 @@ export const GamePage = () => {
                     {
                         [0, 1, 2].map((row) => {
                             return (
-                                <div className="row">
+                                <div className="row" key={"rowTablero_" + row}>
                                     {[0, 1, 2].map((col) => {
                                         const posicion = (row * 3) + col;
                                         return (
-                                            <div className="col-4 py-2">
+                                            <div className="col-4 py-2" key={"posicionTablero_" + posicion}>
                                                 <button className={"w-100 btnPosicionTablero " + (tablero[posicion] == "X" ? "btnPosicionTableroEsX" : "btnPosicionTableroEsO")} onClick={() => llenarPosicion(posicion)}>
                                                     {tablero[posicion]}
                                                 </button>
