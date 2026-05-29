@@ -46,7 +46,7 @@ export const HomePage = () => {
             }, {})
         );
 
-        const datosOrdenados: any = datosAgrupados.sort((a: any, b: any) => b.ganadas - a.ganadas);
+        const datosOrdenados: any = datosAgrupados.sort((a: any, b: any) => ((b.ganadas / b.total) * 100) - ((a.ganadas / a.total) * 100));
 
         setPosiciones(datosOrdenados);
     });
