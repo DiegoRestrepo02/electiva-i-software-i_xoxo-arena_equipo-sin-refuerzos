@@ -58,7 +58,7 @@ export const HomePage = () => {
                     <button type="button" className="btn btn-md btn-primary w-50">¡Empieza la batalla!</button>
                 </NavLink>
             </div>
-            <div className="container">
+            <div className="container mb-5">
                 <div className="text-center mb-5">
                     <h1 className="display-4 fw-bold text-light">
                         <FaTrophy className="color-trofeo" /> Top Globales

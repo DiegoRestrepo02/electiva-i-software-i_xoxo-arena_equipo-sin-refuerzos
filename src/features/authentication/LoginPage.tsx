@@ -93,7 +93,7 @@ export const LoginPage = () => {
         Swal.fire({
             icon: "success",
             title: "¡Genial!",
-            text: "Usuario registrado con éxito.."
+            text: "Usuario registrado con éxito."
         }).then((result) => {
             window.location.reload();
         });
